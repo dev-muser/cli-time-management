@@ -1,0 +1,7 @@
+redis-stable/
+__pycache__/
+venv/
+*.py[cod]
+
+# Rope project settings
+.ropeproject
