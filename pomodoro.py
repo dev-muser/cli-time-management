@@ -3,11 +3,9 @@
 
 
 """
-
-A simple time management utility that make a sound on every minute and announce
-the end of period. It also should track the time by adding the consumed time
-to a data base and the make some inference.
-
+Time management utility that helps user to focus and keeps tracks of time spent.
+User just need to give the time unit and the concern / job / workout (pomodoro
+style) and it will be alerted and data will be also saved.
 """
 
 
@@ -159,4 +157,4 @@ def consume_time(ring=60):
 
 
 if __name__ == "__main__":
-    consume_time(3)
+    consume_time()
