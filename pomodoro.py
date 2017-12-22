@@ -17,6 +17,7 @@ import subprocess
 from time import strftime
 import os
 from sys import exit
+import pathlib
 
 
 class Beep(object):
@@ -52,59 +53,79 @@ class Beep(object):
                   sine 7686')
 
 
-def graph(time_to_work, starting_time, time_left, time_spent_for_domain,
-          finished_time=None):
+def graph(time_spent, starting_time, time_left, concern, finish_time=None):
     ''' Clear the screen and show some stats '''
+
     subprocess.call("clear")
     print("Pomodoro Session Started for {0} minute(s) at {1} \n"
-          .format(time_to_work, starting_time))
+          .format(time_spent, starting_time))
     print("*" * 50)
     if time_left:
         print("\n\nMinute(s) Left: < {}\n".format(time_left))
-        print("Time Spent With: {}\n\n".format(time_spent_for_domain))
+        print("Time Spent With: {}\n\n".format(concern))
     else:
-        print("Time Spent With: {}\n\n".format(time_spent_for_domain))
-        print("\nPomodoro Session Completed at: {}\n".format(finished_time))
+        print("Time Spent With: {}\n\n".format(concern))
+        print("\nPomodoro Session Completed at: {}\n".format(finish_time))
     print("*" * 50)
 
 
-def notification(time_spent_for_domain, time_to_work, starting_time,
-                 starting_date, finished_time):
+def notification(concern, time_spent, starting_time,
+                 starting_date, finish_time):
+    """ Notification for Ubuntu """
+
     notify2.init('Pomodoro')
     notice = notify2.Notification("Times's Up For: {}"
-                                  .format(time_spent_for_domain),
-                                  "Minute(s) Spent: {0}\nStarted at:  \
-                            {1} {2}\nEnded at:  {3}".format(time_to_work,
-                                                            starting_time,
-                                                            starting_date,
-                                                            finished_time))
+                                  .format(concern),
+                                  "Minute(s) Spent: {0}\nStarted at: {1} {2}\n"
+                                  "Ended at:  {3}".format(time_spent,
+                                                          starting_time,
+                                                          starting_date,
+                                                          finish_time))
     notice.show()
 
 
-def write_stats(time_left):
-    # with open("/tmp/pomodoro_time", "w") as f:
-    with open("pomodoro_time", "w") as f:
-        f.write("Minute(s) Left:  {}".format(time_left))
+def write_stats(starting_date, starting_time, concern, time_spent, finish_time):
+    """ Write some stats on a csv file. """
+
+    path = pathlib.Path('time-management.csv')
+
+    if path.is_file():
+        with open('time-management.csv', "a") as f:
+            f.write("\n{0}, {1}, {2}, {3}, {4}".format(starting_date,
+                                                       starting_time,
+                                                       concern,
+                                                       time_spent,
+                                                       finish_time))
+    else:
+        with open('time-management.csv', "w") as f:
+            f.write("Starting Date, Starting Time, Concern, Time Spent,"
+                    " Finish Time")
+            f.write("\n")
+            f.write("{0}, {1}, {2}, {3}, {4}".format(starting_date,
+                                                     starting_time,
+                                                     concern,
+                                                     time_spent,
+                                                     finish_time))
 
 
-def consume_time():
+def consume_time(ring=60):
     ''' Manage the time '''
 
     # Query about the time and how will be spended.
     try:
-        time_to_work = int(input("\n\n\nMinutes to workout?   "))  # mins
+        time_spent = int(input("\n\n\nMinutes to workout?   "))  # mins
     except Exception as e:
         # Prettify
         print("_" * 50 + "\n")
         print(e)
         print("\nNot a number.Exit !")
         exit()
-    time_left = time_to_work
+    time_left = time_spent
 
     # Prettify
     print("_" * 50)
 
-    time_spent_for_domain = input("What are you working?   ")
+    concern = input("What are you working?   ")
 
     # Alert with a beep the user about the tracking time.
     beep = Beep()
@@ -114,35 +135,25 @@ def consume_time():
     starting_time = strftime("%H:%M:%S")
     starting_date = strftime("%m-%d-%Y")
 
-    # Write some stats
-    write_stats(time_left)
-
     while time_left:
-        graph(time_to_work, starting_time, time_left, time_spent_for_domain)
-        sleep(60)
+        graph(time_spent, starting_time, time_left, concern)
+        sleep(ring)
         if time_left == 1:
             beep.long()
         else:
             beep.double()
         time_left -= 1
 
-        # Write some stats
-        write_stats(time_left)
-        # with open("/tmp/pomodoro_time", "w") as f:
-        #     f.write("Minute(s) Left:  {}".format(time_left))
-
     # sleep(3)
     # subprocess.Popen(['spd-say', -p -30',  'Work done ! Your work on {} has \
-    #                   finished'.format(time_spent_for_domain)])
-    finished_time = strftime("%H:%M:%S")
-    # print("\nPomodoro Session Completed at: {}\n".format(finished_time))
-    graph(time_to_work, starting_time, time_left, time_spent_for_domain,
-          finished_time)
-    # print("#" * 50)
+    #                   finished'.format(concern)])
 
-    notification(time_spent_for_domain, time_to_work, starting_time,
-                 starting_date, finished_time)
+    finish_time = strftime("%H:%M:%S")
+
+    graph(time_spent, starting_time, time_left, concern, finish_time)
+    write_stats(starting_date, starting_time, concern, time_spent, finish_time)
+    notification(concern, time_spent, starting_time, starting_date, finish_time)
 
 
 if __name__ == "__main__":
-    consume_time()
+    consume_time(3)
