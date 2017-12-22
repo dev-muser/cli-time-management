@@ -85,17 +85,17 @@ def notification(concern, time_spent, starting_time,
 def write_stats(starting_date, starting_time, concern, time_spent, finish_time):
     """ Write some stats on a csv file. """
 
-    path = pathlib.Path('time-management.csv')
+    path = pathlib.Path('data/time-management.csv')
 
     if path.is_file():
-        with open('time-management.csv', "a") as f:
+        with open('data/time-management.csv', "a") as f:
             f.write("\n{0}, {1}, {2}, {3}, {4}".format(starting_date,
                                                        starting_time,
                                                        concern,
                                                        time_spent,
                                                        finish_time))
     else:
-        with open('time-management.csv', "w") as f:
+        with open('data/time-management.csv', "w") as f:
             f.write("Starting Date, Starting Time, Concern, Time Spent,"
                     " Finish Time")
             f.write("\n")

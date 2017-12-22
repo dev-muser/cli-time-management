@@ -1,4 +1,4 @@
-redis-stable/
+data/
 __pycache__/
 venv/
 *.py[cod]
