@@ -154,6 +154,9 @@ def consume_time(ring=60):
     write_stats(starting_date, starting_time, concern, time_spent, finish_time)
     notification(concern, time_spent, starting_time, starting_date, finish_time)
 
+    # Load the app again, calling recursive function
+    consume_time()
+
 
 if __name__ == "__main__":
     consume_time(3)
