@@ -3,7 +3,7 @@
 
 
 """
-Time management utility that helps user to focus and keeps tracks of time spent.
+Time management utility that helps user to focus and keeps track of time spent.
 User just need to give the time unit and the concern / job / workout (pomodoro
 style) and it will be alerted and data will be also saved.
 """
