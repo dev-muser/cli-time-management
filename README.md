@@ -1,12 +1,8 @@
-# Time Management - CLI Pomodoro style
+# Time Management - Simple CLI Assistant.
 
-I'm concerned about how i'm spending my time and also i need an assistent to tell me to take a break.
+Time management utility that helps user to focus and keeps track of time spent.
 
-I writed this Time Management Python Application that can track what i'm doing on a specific job, on a specific time unit and also to record my time spent in a simple way.
+User just need to give the time unit and the concern / job / workout (pomodoro
+style) and it will be alerted and data will be also saved.
 
-It's design to work simple, so the app is asking for now just how many minutes would i want to allocate for this job and what i'm working on. Like [pomodoro principles](https://en.wikipedia.org/wiki/Pomodoro_Technique). 
-
-It then start alerting with 3 beeps that is tracking my time. 
-For each minute elapsed, the app alerts with a double short beep and show some stats about the begining time, time left and what i'm working on.
-
-When the allocated time is over, the application alert me with a long beep, show some simple stats and also save the stats on a csv file.
+I wrote about this utility app and my motivation on my blog [tech-dev](https://tech-dev.xyz).
